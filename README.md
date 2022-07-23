@@ -3,8 +3,11 @@ EventViewer Bypass Uac Bof
 
 ## 主要参考了如下作者的代码：
 https://github.com/Octoberfest7/EventViewerUAC_BOF
+
 https://github.com/netero1010/TrustedPath-UACBypass-BOF
+
 https://github.com/CsEnox/EventViewer-UACBypass
+
 
 ## 执行流程
 Bypass过程利用了Unsafe .Net Deserialization in Windows Event Viewer ，程序主要完成了如下流程
