@@ -34,4 +34,4 @@ x86_64-w64-mingw32-gcc -o EventViewerUAC.x64.o -c main2.c
 
 3、EVUAC Payload Env （Env 通过执行 shell set |findstr \"LOCALAPPDATA\" 获得）
 
-<img width="1480" alt="image" src="https://user-images.githubusercontent.com/37012218/180590626-d96d505b-98fa-4072-a9e9-40f19f51eb84.png">
+<img width="1470" alt="image" src="https://user-images.githubusercontent.com/37012218/180590710-ad9400e6-b6ca-4fd3-bee4-cd3dc3715964.png">
